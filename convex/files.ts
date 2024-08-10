@@ -25,7 +25,7 @@ export async function hasAccessToOrg(
   orgId: string
 ) {
   const identity = await ctx.auth.getUserIdentity();
-
+  console.log("identity", identity)
   if (!identity) {
     return null;
   }
@@ -36,11 +36,12 @@ export async function hasAccessToOrg(
       q.eq("tokenIdentifier", identity.tokenIdentifier)
     )
     .first();
-
+    
+    
   if (!user) {
     return null;
   }
-
+  console.log("orgId", orgId)
   const hasAccess =
     user.orgIds.some((item) => item.orgId === orgId) ||
     user.tokenIdentifier.includes(orgId);
@@ -57,21 +58,21 @@ export const createFile = mutation({
     name: v.string(),
     fileId: v.id("_storage"),
     orgId: v.string(),
-    type: fileTypes,
+    type: v.any(),
   },
   async handler(ctx, args) {
+    console.log("testing access to org")
     const hasAccess = await hasAccessToOrg(ctx, args.orgId);
 
     if (!hasAccess) {
       throw new ConvexError("you do not have access to this org");
     }
-
     await ctx.db.insert("files", {
       name: args.name,
       orgId: args.orgId,
       fileId: args.fileId,
       type: args.type,
-      userId: hasAccess.user._id,
+      userId: hasAccess.user._id
     });
   },
 });
@@ -82,7 +83,7 @@ export const getFiles = query({
     query: v.optional(v.string()),
     favorites: v.optional(v.boolean()),
     deletedOnly: v.optional(v.boolean()),
-    type: v.optional(fileTypes),
+    type: v.optional(v.any()),
   },
   async handler(ctx, args) {
     const hasAccess = await hasAccessToOrg(ctx, args.orgId);

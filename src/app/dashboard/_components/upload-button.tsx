@@ -60,7 +60,7 @@ export function UploadButton() {
     const postUrl = await generateUploadUrl();
 
     const fileType = values.file[0].type;
-
+    console.log(fileType)
     const result = await fetch(postUrl, {
       method: "POST",
       headers: { "Content-Type": fileType },
@@ -71,8 +71,9 @@ export function UploadButton() {
     const types = {
       "image/png": "image",
       "application/pdf": "pdf",
-      "text/csv": "csv",
-    } as Record<string, Doc<"files">["type"]>;
+      "text/csv": ["csv"],
+      "text/plain": ["txt"],
+    } as unknown as Record<string, Doc<"files">["type"]>;
 
     try {
       await createFile({

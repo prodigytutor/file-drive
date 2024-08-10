@@ -120,6 +120,7 @@ export function FileBrowser({
                 <SelectItem value="image">Image</SelectItem>
                 <SelectItem value="csv">CSV</SelectItem>
                 <SelectItem value="pdf">PDF</SelectItem>
+                <SelectItem value="txt">Text</SelectItem>
               </SelectContent>
             </Select>
           </div>

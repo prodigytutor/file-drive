@@ -4,7 +4,14 @@ import { v } from "convex/values";
 export const fileTypes = v.union(
   v.literal("image"),
   v.literal("csv"),
-  v.literal("pdf")
+  v.literal("pdf"),
+  v.literal("txt"),
+  v.literal("docx"),
+  v.literal("xlsx"),
+  v.literal("js"),
+  v.literal("jsx"),
+  v.literal("ts"),
+  v.literal("tsx")
 );
 
 export const roles = v.union(v.literal("admin"), v.literal("member"));
@@ -12,7 +19,7 @@ export const roles = v.union(v.literal("admin"), v.literal("member"));
 export default defineSchema({
   files: defineTable({
     name: v.string(),
-    type: fileTypes,
+    type: v.any(),
     orgId: v.string(),
     fileId: v.id("_storage"),
     userId: v.id("users"),
